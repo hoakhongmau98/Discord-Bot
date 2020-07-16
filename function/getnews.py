@@ -2,21 +2,26 @@ from bs4 import BeautifulSoup
 import requests
 
 
+# get news from zing.vn
 def get_news():
     url = "https://news.zing.vn/"
     html_content = requests.get(url).text
-
+    
     soup = BeautifulSoup(html_content, features="html.parser")
-
+    
     # print(soup.title.text)
     a = 0
     lst_link = []
+    # extract link as .html
+    # because link in html file ís not cpmpleted: "https://zing.vn/link_.html" <=> a[link_.html]
     for link in soup.find("div", attrs={"data-content": "newsfeatured"}).select('a[href]'):
-        # print("Inner Text: {}".format(link.text))
-        # print("Title: {}".format(link.get("title")))
-        # print("href: {}".format(link.get("href")))
+        # print(f"Inner Text: {link.text}")
+        # print(f"Title: {link.get("title")}")
+        # print(f"href: {link.get("href")}")
         # print(type(link))
-        # print(type(soup))
+        # print(type(soup)).
+        
+        # completed link
         for href in link:
             str_out = 'https://zing.vn'+''.join(link.get('href'))
             lst_link.append(str_out)
@@ -32,6 +37,8 @@ def get_news():
     return set(lst_link)
 
 
+# genk.vn news:
+# i clone all news on page and compare links with 10 links i was clone last time.
 def get_tech():
     url = 'https://genk.vn'
     html_content = requests.get(url).text
@@ -70,6 +77,7 @@ def get_tech():
             link_out = list_news
     return link_out
 
+# use url to get json file and extract all infor by country
 def covid19(text):
     url = "https://coronaapiwom.herokuapp.com/apidata?utm_source=j2team&utm_medium=url_shortener"
     r = requests.get(url)
