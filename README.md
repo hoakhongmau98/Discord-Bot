@@ -1,5 +1,7 @@
 please input your token in filetxt/token.txt
+\n
 11:40 18-12-2020: Error 
+\n
 ""
 Ignoring exception in on_message
 Traceback (most recent call last):
