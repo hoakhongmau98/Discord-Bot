@@ -16,13 +16,13 @@ import time
 #               [0, 0, 7],
 #               [0, 2, 4]]
 
-main_board = [[], [], [], [], [], [], [], [], []]
-i = 0
-while i < 9:
-    lst_row = list(map(int, (input(f'nhập dãy số {i} (viết liền không khoảng trắng:)'))))
-    if len(lst_row) == 9:
-        main_board[i] = lst_row
-        i += 1
+# main_board = [[], [], [], [], [], [], [], [], []]
+# i = 0
+# while i < 9:
+#     lst_row = list(map(int, (input(f'nhập dãy số {i} (viết liền không khoảng trắng:)'))))
+#     if len(lst_row) == 9:
+#         main_board[i] = lst_row
+#         i += 1
 
 # main_board = np.array(main_board)
 
@@ -124,7 +124,7 @@ def print_board(m):
 
 
 # print(main_board)
-print_board(main_board)
+# print_board(main_board)
 
 
 def find_blank_place(m):
@@ -158,7 +158,7 @@ def find_blank_place(m):
 
 # check rule board
 
-
-print("------------solver-------------")
-sudoku_sovel(main_board)
-print_board(main_board)
+#
+# print("------------solver-------------")
+# sudoku_sovel(main_board)
+# print_board(main_board)
