@@ -1,0 +1,4 @@
+- convert sudokuboard to an image
+- delete !covid
+- hide !tectnews
+

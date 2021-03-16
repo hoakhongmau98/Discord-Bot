@@ -60,6 +60,7 @@ async def on_message(message):
             embed.add_field(name="!tech", value="Báo Genk.vn")
             # embed.add_field(name="!covid19", value="!covid19:<country>")
             embed.add_field(name="!sudoku", value="type your board sudoku")
+            embed.add_field(name="!img", value="show a random image")
             await message.channel.send(content=None, embed=embed)
         if sms.find('!make_password') != -1:
             str_in = message.content.split(':')
@@ -103,6 +104,8 @@ async def on_message(message):
             str_in = message.content.split(':')
             str_weather = weather.weather(str_in[1])
             await message.channel.send(str_weather)
+        if sms.find('!img') != -1:
+            await message.channel.send(file=discord.File('none.jpg'))
         if sms.find('!time') != -1:
             str_a = str(datetime.datetime.now())
             await message.channel.send(str_a)
