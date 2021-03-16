@@ -1,6 +1,5 @@
-import numpy as np
-import random
-import time
+from PIL import Image, ImageDraw, ImageFont
+
 
 # main_board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
 #               [0, 3, 0, 0, 0, 9, 0, 5, 0],
@@ -16,18 +15,18 @@ import time
 #               [0, 0, 7],
 #               [0, 2, 4]]
 
-main_board = [[], [], [], [], [], [], [], [], []]
-i = 0
-while i < 9:
-    lst_row = list(map(int, (input(f'nhập dãy số {i} (viết liền không khoảng trắng:)'))))
-    if len(lst_row) == 9:
-        main_board[i] = lst_row
-        i += 1
+# main_board = [[], [], [], [], [], [], [], [], []]
+# i = 0
+# while i < 9:
+#     lst_row = list(map(int, (input(f'nhập dãy số {i} (viết liền không khoảng trắng:)'))))
+#     if len(lst_row) == 9:
+#         main_board[i] = lst_row
+#         i += 1
 
 # main_board = np.array(main_board)
 
 
-def sudoku_sovel(m):
+def sudoku_solver(m):
     place = find_blank_place(m)
     if not place:
         return True
@@ -38,15 +37,15 @@ def sudoku_sovel(m):
         if check_board(m, number, row, col):
             m[row][col] = number
             # time.sleep(0.5)
-            print("------------Preview------------")
-            print_board(m)
+            # print("------------Preview------------")
+            # print_board(m)
             # tiếp tục thực hiện nếu trả True thì tiếp tục vòng lặp
-            if sudoku_sovel(m):
+            if sudoku_solver(m):
                 return True
             # Nếu lỗi hoặc trả về False ở 1 bước sẽ gán lại giá trị 0 cho m, lặp lại vòng lặp
             else:
                 m[row][col] = 0
-    return print("Can't solver")
+    return False
 
 
 def check_board(m, number, row, col):
@@ -124,7 +123,7 @@ def print_board(m):
 
 
 # print(main_board)
-print_board(main_board)
+# print_board(main_board)
 
 
 def find_blank_place(m):
@@ -159,6 +158,32 @@ def find_blank_place(m):
 # check rule board
 
 
-print("------------solver-------------")
-sudoku_sovel(main_board)
-print_board(main_board)
+# print("------------solver-------------")
+# sudoku_solver(main_board)
+# print_board(main_board)
+
+
+def sudoku_board_image(m):
+    sudoku_solver(m)
+    img = Image.new('RGB', (901, 901), color='white')
+    d = ImageDraw.Draw(img)
+    # d.text((30, 30), text='1', fill='black')
+    # d.line((10, 0) + (10, 60), fill=128)
+    grid_w = int(int(img.width)/9)
+    for i in range(0, int(img.width), grid_w):
+        d.line((i, 0) + (i, int(img.width)), fill='lightgreen')
+        d.line((0, i) + (int(img.width), i), fill='lightgreen')
+    font = ImageFont.truetype("arial.ttf", 100)
+    w, h = d.textsize('0', font=font)
+    for x in range(9):
+        for y in range(9):
+            color = 'gray'
+            text = str(m[x][y])
+            if text != '0':
+                color = 'lightblue'
+            d.text(((100 - w) / 2 + x * 100, (80 - h) / 2 + y * 100), text=str(m[x][y]), fill=color, font=font)
+    # d.text(((100 - w)/2 + 100, (80 - h)/2), text='9', fill='lightblue', font=font)
+    # d.text(((100 - w)/2, (80 - h)/2 + 100), text='9', fill='black', font=font)
+    # img.show()
+    img.save('img/sudoku.png')
+    return

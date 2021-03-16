@@ -10,6 +10,7 @@ import Dict.findwords as findwords
 import function.weather as weather
 import function.get_tkb as get_tkb
 import function.getnews as getnews
+import pythonProject.sudoku_solver as sudoku_solver
 
 
 def get_token():
@@ -19,12 +20,17 @@ def get_token():
 
 
 clinet = discord.Client()
+main_board = [[], [], [], [], [], [], [], [], []]
 
 
 @clinet.event
 async def on_ready():
     print('The bot is ready !!')
     activiti = discord.Game(name="I'm Bot")
+    # Status = {'playing': Game, 'Streaming': Streaming}
+    # activity=discord.Activity(type=discord.ActivityType.listening, name="a song") || Listening
+    # activity=discord.Activity(type=discord.ActivityType.watching, name="a movie") || watching
+    # activiti = discord.Activity(type=discord.ActivityType.custom, state="Dev")
     await clinet.change_presence(status=discord.Status.online, activity=activiti)
 
 
@@ -52,7 +58,9 @@ async def on_message(message):
             embed.add_field(name="!tkb", value="!tkb:<day of week>")
             embed.add_field(name="!news", value="Báo Zing.vn")
             embed.add_field(name="!tech", value="Báo Genk.vn")
-            embed.add_field(name="!covid19", value="!covid19:<country>")
+            # embed.add_field(name="!covid19", value="!covid19:<country>")
+            embed.add_field(name="!sudoku", value="type your board sudoku")
+            embed.add_field(name="!img", value="show a random image")
             await message.channel.send(content=None, embed=embed)
         if sms.find('!make_password') != -1:
             str_in = message.content.split(':')
@@ -96,6 +104,8 @@ async def on_message(message):
             str_in = message.content.split(':')
             str_weather = weather.weather(str_in[1])
             await message.channel.send(str_weather)
+        if sms.find('!img') != -1:
+            await message.channel.send(file=discord.File('none.jpg'))
         if sms.find('!time') != -1:
             str_a = str(datetime.datetime.now())
             await message.channel.send(str_a)
@@ -113,6 +123,40 @@ async def on_message(message):
             str_out = str_out[1:]
             for str_out in str_out:
                 await message.channel.send(str_out)
+        if sms.find("!sudoku:") != -1:
+            if sms[-1] != ":":
+                # note: nhận tin nhắn và kiểm tra chuỗi dựa trên ':' và '|'
+                # sau khi cắt chuỗi kiểm tra lại từng chuỗi con và đảm bảo tính đúng đắn của từng row trong board
+                lst_row = sms.split(":")[1].split('|')
+                if len(lst_row) != 9:
+                    await message.channel.send('error board: can specified')
+                    breakpoint()
+                for row in lst_row:
+                    if len(row) != 9:
+                        await message.channel.send(f'error board {row}, len row: {len(row)}')
+                        breakpoint()
+                # convert 1 dimensional to 2 dimensional array
+                lst_row = [list(map(int, x)) for x in lst_row]
+                # print(lst_row)
+                # solver and return to an image img/sudoku.png
+                sudoku_solver.sudoku_board_image(lst_row)
+                await message.channel.send(file=discord.File('img/sudoku.png'))
+            else:
+                await message.channel.send('type: !sudoku:<your board>\n'
+                                           '!sudoku:0001469466|04669465665|582306520|2952065203|...')
+        # if sms.find('!sudoku') != -1:
+        #     i = 0
+        #     while i < 9:
+        #         lst_row = list(map(int, (input(await message.channel.send(
+        #             f'nhập dãy số {i} (viết liền không khoảng trắng):')))))
+        #         print(lst_row)
+        #         if len(lst_row) == 9:
+        #             main_board[i] = lst_row
+        #             i += 1
+        #     solver = sudoku.sudoku_sovel(main_board)
+        #     for board in solver:
+        #         await message.channel.send(board)
+        # ***********************************************************
         # if sms.find('!covid19') != -1:
         #     country = message.content.split(':')
         #     str_out = getnews.covid19(country[1])
