@@ -10,7 +10,7 @@ import Dict.findwords as findwords
 import function.weather as weather
 import function.get_tkb as get_tkb
 import function.getnews as getnews
-import pythonProject.main as sudoku
+import pythonProject.sudoku_solver as sudoku_solver
 
 
 def get_token():
@@ -135,26 +135,12 @@ async def on_message(message):
                     if len(row) != 9:
                         await message.channel.send(f'error board {row}, len row: {len(row)}')
                         breakpoint()
-                    else:
-                        str_out = '|'
-                        for i in range(9):
-                            s_char = row[i]
-                            if s_char == 0:
-                                s_char = ' '
-                            if i in [2, 5, 8]:
-                                str_out += ' ' + str(s_char) + ' |'
-                                # print(' ' + str(s_char) + ' |', end='')
-                            else:
-                                str_out += ' ' + str(s_char) + ' '
-                                # print(' ' + str(s_char) + ' ', end='')
-                        if lst_row.index(row) in [2, 5, 8]:
-                            await message.channel.send(str_out)
-                            await message.channel.send('\n' + '-'*31)
-                            # print('\n' + '-' * 31)
-                        else:
-                            await message.channel.send(str_out)
-                            # await message.channel.send('')
-                        # await message.channel.send(row)
+                # convert 1 dimensional to 2 dimensional array
+                lst_row = [list(map(int, x)) for x in lst_row]
+                # print(lst_row)
+                # solver and return to an image img/sudoku.png
+                sudoku_solver.sudoku_board_image(lst_row)
+                await message.channel.send(file=discord.File('img/sudoku.png'))
             else:
                 await message.channel.send('type: !sudoku:<your board>\n'
                                            '!sudoku:0001469466|04669465665|582306520|2952065203|...')

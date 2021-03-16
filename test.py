@@ -183,3 +183,4 @@ for x in range(9):
 # d.text(((100 - w)/2 + 100, (80 - h)/2), text='9', fill='lightblue', font=font)
 # d.text(((100 - w)/2, (80 - h)/2 + 100), text='9', fill='black', font=font)
 img.show()
+img.save('img/sudoku.png')
